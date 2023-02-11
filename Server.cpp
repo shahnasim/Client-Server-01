@@ -27,7 +27,7 @@ class Stock {
 
 // Function to process BUY command
 void processBuy(std::vector<User> &users, std::vector<Stock> &stocks,
-                int userId, float stockPrice, int stockAmount) {
+                int userId, float stockPrice, int stockAmount, std::string symbol) {
   for (auto &user : users) {
     if (user.id == userId) {
       float totalPrice = stockPrice * stockAmount;
@@ -57,7 +57,7 @@ void processBuy(std::vector<User> &users, std::vector<Stock> &stocks,
 
 // Function to process SELL command
 void processSell(std::vector<User> &users, std::vector<Stock> &stocks,
-                 int userId, float stockPrice, int stockAmount) {
+                 int userId, float stockPrice, int stockAmount, std::string symbol) {
   for (auto &user : users) {
     if (user.id == userId) {
       bool stockExists = false;
@@ -83,3 +83,24 @@ void processSell(std::vector<User> &users, std::vector<Stock> &stocks,
     }
   }
   std::cout << "User not found" << std::endl;
+}
+// Function to process LIST command
+void processList(std::vector<User> &users, std::vector<Stock> &stocks,
+                 int userId, float stockPrice, int stockAmount, std::string symbol){
+
+}
+
+// Function to process BALANCE command
+void processBalance(){
+
+}
+
+// Function to process SHUTDOWN command
+void processShutdown(){
+
+}
+
+// FUnction to process QUIT command
+void processQuit(){
+  
+}
