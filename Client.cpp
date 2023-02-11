@@ -1,106 +1,95 @@
 #include <iostream>
+#include <string>
 #include <cstring>
+#include <sstream>
 #include <unistd.h>
+#include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
-#include <vector>
+#include <arpa/inet.h>
 
-const int SERVER_PORT = 12345; // Replace with the last 4 digits of your UM-ID
+#define SERVER_PORT 12345 // Replace this with the last 4 digits of your UM-ID
+#define MAX_BUFFER_LENGTH 1024
 
-// User class to store user information
-class User {
- public:
-  User(int id, float balance) : id(id), balance(balance) {}
-  int id;
-  float balance;
-};
+using namespace std;
 
-// Stock class to store stock information
-class Stock {
- public:
-  Stock(std::string symbol, float price, int amount)
-      : symbol(symbol), price(price), amount(amount) {}
-  std::string symbol;
-  float price;
-  int amount;
-};
+int main(int argc, char *argv[]) {
+  if (argc != 2) {
+    cerr << "Usage: " << argv[0] << " <server_ip>" << endl;
+    return 1;
+  }
 
-// Function to process BUY command
-void processBuy(std::vector<User> &users, std::vector<Stock> &stocks,
-                int userId, float stockPrice, int stockAmount, std::string symbol) {
-  for (auto &user : users) {
-    if (user.id == userId) {
-      float totalPrice = stockPrice * stockAmount;
-      if (user.balance < totalPrice) {
-        std::cout << "Not enough balance" << std::endl;
-        return;
-      }
-      user.balance -= totalPrice;
-      bool stockExists = false;
-      for (auto &stock : stocks) {
-        if (stock.symbol == symbol) {
-          stock.amount += stockAmount;
-          stockExists = true;
-          break;
-        }
-      }
-      if (!stockExists) {
-        stocks.push_back(Stock(symbol, stockPrice, stockAmount));
-      }
-      std::cout << "200 OK " << user.balance << " "
-                << stockAmount * stockPrice << std::endl;
-      return;
+  int sockfd;
+  struct sockaddr_in serv_addr;
+
+  if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
+    cerr << "Error: Unable to create socket" << endl;
+    return 1;
+  }
+
+  memset(&serv_addr, 0, sizeof(serv_addr));
+  serv_addr.sin_family = AF_INET;
+  serv_addr.sin_port = htons(SERVER_PORT);
+
+  if (inet_pton(AF_INET, argv[1], &serv_addr.sin_addr) <= 0) {
+    cerr << "Error: Invalid server IP address" << endl;
+    return 1;
+  }
+
+  if (connect(sockfd, (struct sockaddr*)&serv_addr, sizeof(serv_addr)) < 0) {
+    cerr << "Error: Unable to connect to server" << endl;
+    return 1;
+  }
+
+  while (true) {
+    cout << "Enter command (BUY, SELL, LIST, BALANCE, SHUTDOWN, QUIT): ";
+    string cmd;
+    cin >> cmd;
+
+    string request;
+    if (cmd == "BUY") {
+      string stock_symbol, user_id;
+      int stock_amount;
+      double price;
+      cout << "Enter stock symbol: ";
+      cin >> stock_symbol;
+      cout << "Enter stock amount: ";
+      cin >> stock_amount;
+      cout << "Enter price per stock: ";
+      cin >> price;
+      cout << "Enter user ID: ";
+      cin >> user_id;
+      request = cmd + " " + stock_symbol + " " + to_string(stock_amount) + " " + to_string(price) + " " + user_id + "\n";
+    } 
+    else if (cmd == "SELL") {
+      string stock_symbol, user_id;
+      int stock_amount;
+      double price;
+      cout << "Enter stock symbol: ";
+      cin >> stock_symbol;
+      cout << "Enter stock amount: ";
+      cin >> stock_amount;
+      cout << "Enter price per stock: ";
+      cin >> price;
+      cout << "Enter user ID: ";
+      cin >> user_id;
+      request = cmd + " ";
+    } 
+    else if (cmd == "LIST"){
+      
+    } 
+    else if (cmd == "BALANCE"){
+    float balance;
+    std::string name;
+    std::cout << "Balance for user " + name + ": $" + to_string(balance) + "\n";
+    } 
+    else if (cmd == "SHUTDOWN"){
+
+    } 
+    else if (cmd == "QUIT"){
+
+    } 
+    else {
+      std::cout << "Error invalid input";
     }
   }
-  std::cout << "User not found" << std::endl;
-}
-
-// Function to process SELL command
-void processSell(std::vector<User> &users, std::vector<Stock> &stocks,
-                 int userId, float stockPrice, int stockAmount, std::string symbol) {
-  for (auto &user : users) {
-    if (user.id == userId) {
-      bool stockExists = false;
-      for (auto &stock : stocks) {
-        if (stock.symbol == symbol) {
-          if (stock.amount < stockAmount) {
-            std::cout << "Not enough stocks" << std::endl;
-            return;
-          }
-          stock.amount -= stockAmount;
-          user.balance += stockPrice * stockAmount;
-          stockExists = true;
-          break;
-        }
-      }
-      if (!stockExists) {
-        std::cout << "Stock not found" << std::endl;
-        return;
-      }
-      std::cout << "200 OK " << user.balance << " "
-                << stockAmount * stockPrice << std::endl;
-      return;
-    }
-  }
-  std::cout << "User not found" << std::endl;
-}
-// Function to process LIST command
-void processList(std::vector<User> &users, std::vector<Stock> &stocks,
-                 int userId, float stockPrice, int stockAmount, std::string symbol){
-
-}
-
-// Function to process BALANCE command
-void processBalance(){
-
-}
-
-// Function to process SHUTDOWN command
-void processShutdown(){
-
-}
-
-// FUnction to process QUIT command
-void processQuit(){
-  
-}
