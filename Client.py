@@ -3,7 +3,7 @@ import socket
 def main():
     def commands():
         while True:
-            command = input("Enter the command (BUY, SELL, LIST, BALANCE, QUIT, SHUTDOWN): ")
+            command = input("Enter your command (BUY, SELL, LIST, BALANCE, QUIT, SHUTDOWN): ")
             client.send(command)
             if command == "BUY":
                 stock_symbol,user_id = ""
@@ -51,3 +51,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
