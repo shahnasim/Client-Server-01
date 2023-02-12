@@ -1,24 +1,28 @@
 import socket
 
-SERVER_PORT = 12345 #REPLACE WITH UMID
+def main():
+    serv = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server_socket.bind(('', SERVER_PORT))
-server_socket.listen(1)
+    serv.bind(('0.0.0.0', 8080))
+    serv.listen(5)
 
-conn,addr = server_socket.accept()
-data = conn.recv(1024).decode()
-command = data.split()[0]
+    while True:
+        conn, addr = serv.accept()
+        from_client = ''
+        while True:
+            data = conn.recv(4096)
+            if not data: break
+            from_client += data
+            print (from_client)
+            conn.send("I am SERVER\n")
+        conn.close()
+        print ('client disconnected')
 
 def user():
-    
-    id = 0
-    balance = 0.00
+    pass
 
-def Stock():
-    
-    price = 0.00
-    amount = 0
+def stock():
+    pass
 
 def processBuy():
     pass
@@ -29,11 +33,12 @@ def processSell():
 def processList():
     pass
 
-def processBalance():
-    pass
-
 def processQuit():
     pass
 
 def processShutdown():
     pass
+
+
+if __name__ == "__main__": 
+    main()
