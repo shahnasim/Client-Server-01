@@ -1,11 +1,16 @@
 import socket
+import sys
+import os
 
 def main():
 
     def commands():
         while True:
+            #Asks user what they want to do and sends command to server
             command = raw_input("Enter your command (BUY, SELL, LIST, BALANCE, QUIT, SHUTDOWN): ")
             client.send(command)
+
+            #Sends user info to server for BUY command
             if command == "BUY":
                 stock_symbol = "MSFT"
                 user_id = "1234"
@@ -18,6 +23,7 @@ def main():
                 request = command + " " + stock_symbol + " " + str(stock_amount) + " " + str(price) + " " + user_id + "\n"
                 client.send(request)
 
+            #Sends user info to server for SELL command
             elif command == "SELL":
                 stock_symbol = "MSFT"
                 user_id = "1234"
@@ -30,11 +36,13 @@ def main():
                 request = command + " " + stock_symbol + " " + str(stock_amount) + " " + str(price) + " " + user_id + "\n"
                 client.send(request)
 
+            #Sends user info to server for LIST command
             elif command == "LIST":
-                
+
                 request = ""
                 client.send(request)
 
+            #Sends user info to server for BALANCE command
             elif command == "BALANCE":
                 balance = 0.00
                 name = ""
@@ -42,11 +50,13 @@ def main():
                 request = ""
                 client.send(request)
 
+            #Sends user info to server for QUIT command
             elif command == "QUIT":
 
                 request = ""
                 client.send(request)
 
+            #Sends user info to server for SHUTDOWN command
             elif command == "SHUTDOWN":
 
                 request = ""
@@ -54,6 +64,8 @@ def main():
 
             else:
                 print("Error invalid input")
+
+    #Establishing Connection
     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     SERVER_PORT = 8080
     client.connect(('0.0.0.0', SERVER_PORT))
