@@ -12,19 +12,19 @@ def main():
         print("buy")
 
     def processSell():
-        print("sell")
+        return("sell")
 
     def processList():
-        print("list")
+        return("list")
 
     def processBalance():
-        print("balance")
+        return("balance")
 
     def processQuit():
-        print("quit")
+        return("quit")
 
     def processShutdown():
-        print("shutdown")
+        return("shutdown")
     
     def option():
     #Takes the client input and compares first two letters
@@ -46,7 +46,8 @@ def main():
 
     #Establishing Connection
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server.bind(('0.0.0.0', 8080))
+    SERVER_PORT = 8080
+    server.bind(('0.0.0.0', SERVER_PORT))
     server.listen(5)
     while True:
         conn, addr = server.accept()
@@ -60,5 +61,6 @@ def main():
 
 if __name__ == "__main__": 
     main()
+
 
 
