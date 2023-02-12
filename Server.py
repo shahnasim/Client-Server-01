@@ -5,11 +5,23 @@ import os
 def main():
     # Function to define user credentials
     def user():
-        pass
+
+        userId = 0
+        if userId == None:
+            return("Error invalid UMID")
+        email = ""
+        fName = ""
+        lName = ""
+        uName = ""
+        passW = ""
+        bal = 0
 
     # Function to get stock information
     def stock():
-        pass
+        stockSymbol = ""
+        stockName = ""
+        stockBalance = 0.00
+        userId = 0
 
     #Processes BUY command
     def processBuy():
@@ -70,6 +82,7 @@ def main():
 
 if __name__ == "__main__": 
     main()
+
 
 
 
