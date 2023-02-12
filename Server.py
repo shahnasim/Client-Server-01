@@ -27,18 +27,20 @@ def main():
     
     def option():
         while True:
-            if command == "BUY":
+            if data[:2].decode("uft-8") == "BU":
                 processBuy()
-            elif command == "SELL":
+            elif data[:2].decode("uft-8") == "SE":
                 processSell()
-            elif command == "LIST":
+            elif data[:2].decode("uft-8") == "LI":
                 processList()
-            elif command == "BALANCE":
+            elif data[:2].decode("uft-8") == "BA":
                 processBalance()
-            elif command == "QUIT":
+            elif data[:2].decode("uft-8") == "QU":
                 processQuit()
-            elif command == "SHUTDOWN":
+            elif data[:2].decode("uft-8") == "SH":
                 processShutdown()
+            else:
+                print("error")
 
     serv = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     serv.bind(('0.0.0.0', 8080))
@@ -47,7 +49,6 @@ def main():
         conn, addr = serv.accept()
         from_client = ''
         while True:
-            command = conn.recv(1234)
             data = conn.recv(4096)
             if not data: break
             from_client += data
