@@ -11,7 +11,7 @@ def main():
             client.send(command)
 
             #Sends user info to server for BUY command
-            if command == "BUY":
+            if command == "BUY" or "buy":
                 stock_symbol = "MSFT"
                 user_id = "1234"
                 stock_amount = 0
@@ -24,7 +24,7 @@ def main():
                 client.send(request)
 
             #Sends user info to server for SELL command
-            elif command == "SELL":
+            elif command == "SELL" or "sell":
                 stock_symbol = "MSFT"
                 user_id = "1234"
                 stock_amount = 0
@@ -37,33 +37,34 @@ def main():
                 client.send(request)
 
             #Sends user info to server for LIST command
-            elif command == "LIST":
+            elif command == "LIST" or "list":
 
-                request = ""
+                request = command
                 client.send(request)
 
             #Sends user info to server for BALANCE command
-            elif command == "BALANCE":
+            elif command == "BALANCE" or "balance":
                 balance = 0.00
                 name = ""
                 print("Balance for user " + name + ": $" + str(balance) + "\n")
-                request = ""
+                request = command
                 client.send(request)
 
             #Sends user info to server for QUIT command
-            elif command == "QUIT":
+            elif command == "QUIT" or "quit":
 
-                request = ""
+                request = command
+                print("200 OK")
                 client.send(request)
 
             #Sends user info to server for SHUTDOWN command
-            elif command == "SHUTDOWN":
+            elif command == "SHUTDOWN" or "shutdown":
 
-                request = ""
+                request = command
                 client.send(request)
 
             else:
-                print("Error invalid input")
+                print("400 invalid command")
 
     #Establishing Connection
     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
