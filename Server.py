@@ -1,28 +1,37 @@
 import socket
+import sys
+import os
 
 def main():
+    # Function to define user credentials
     def user():
         pass
 
+    # Function to get stock information
     def stock():
         pass
 
-    #Processes commands
+    #Processes BUY command
     def processBuy():
         print("buy")
 
+    #Processes SELL command
     def processSell():
         return("sell")
 
+    #Processes LIST command
     def processList():
         return("list")
 
+    #Processes BALANCE command
     def processBalance():
         return("balance")
 
+    #Processes QUIT command
     def processQuit():
         return("quit")
 
+    #Processes SHUTDOWN command
     def processShutdown():
         return("shutdown")
     
@@ -61,6 +70,8 @@ def main():
 
 if __name__ == "__main__": 
     main()
+
+
 
 
 
