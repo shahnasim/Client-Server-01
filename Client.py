@@ -1,81 +1,46 @@
 import socket
 
+def commands():
+    while True:
+        command = raw_input("Enter your command (BUY, SELL, LIST, BALANCE, QUIT, SHUTDOWN): ")
+        if command in ["BUY", "buy"]:
+            stock_symbol = raw_input("Enter stock symbol: \n")
+            stock_amount = raw_input("Enter stock amount: \n")
+            price = raw_input("Enter price per stock: \n")
+            user_id = raw_input("Enter user ID: \n")
+            request = command + " " + stock_symbol + " " + str(stock_amount) + " " + str(price) + " " + user_id + "\n"
+            return request
+        elif command in ["SELL", "sell"]:
+            stock_symbol = raw_input("Enter stock symbol: \n")
+            stock_amount = raw_input("Enter stock amount: \n")
+            price = raw_input("Enter price per stock: \n")
+            user_id = raw_input("Enter user ID: \n")
+            request = command + " " + stock_symbol + " " + str(stock_amount) + " " + str(price) + " " + user_id + "\n"
+            return request
+        elif command in ["LIST", "list"]:
+            return command
+        elif command in ["BALANCE", "balance"]:
+            balance = 0.00
+            name = raw_input("Enter user name: \n")
+            print("Balance for user " + name + ": $" + str(balance) + "\n")
+            return command
+        elif command in ["SHUTDOWN", "shutdown"]:
+            return command
+        elif command in ["QUIT", "quit"]:
+            return command
+        else:
+            print("400 invalid command")
+
+
 def main():
-
-    def commands():
-        while True:
-            #Asks user what they want to do and sends command to server
-            command = raw_input("Enter your command (BUY, SELL, LIST, BALANCE, QUIT, SHUTDOWN): ")
-            client.send(command)
-
-            #Sends user info to server for BUY command
-            if command == "BUY" or "buy":
-                stock_symbol = "MSFT"
-                user_id = "1234"
-                stock_amount = 0
-                price = 0
-                stock_symbol = raw_input("Enter stock symbol: \n")
-                stock_amount = raw_input("Enter stock amount: \n")
-                price = raw_input("Enter price per stock: \n")
-                user_id = raw_input("Enter user ID: \n")
-                request = command + " " + stock_symbol + " " + str(stock_amount) + " " + str(price) + " " + user_id + "\n"
-                client.send(request)
-                break
-
-            #Sends user info to server for SELL command
-            elif command == "SELL" or "sell":
-                stock_symbol = "MSFT"
-                user_id = "1234"
-                stock_amount = 0
-                price = 0
-                stock_symbol = raw_input("Enter stock symbol: \n")
-                stock_amount = raw_input("Enter stock amount: \n")
-                price = raw_input("Enter price per stock: \n")
-                user_id = raw_input("Enter user ID: \n")
-                request = command + " " + stock_symbol + " " + str(stock_amount) + " " + str(price) + " " + user_id + "\n"
-                client.send(request)
-                break
-
-            #Sends user info to server for LIST command
-            elif command == "LIST" or "list":
-                request = command
-                client.send(request)
-                break
-
-            #Sends user info to server for BALANCE command
-            elif command == "BALANCE" or "balance":
-                balance = 0.00
-                name = ""
-                print("Balance for user " + name + ": $" + str(balance) + "\n")
-                request = command
-                client.send(request)
-                break
-
-            #Sends user info to server for SHUTDOWN command
-            elif command == "SHUTDOWN" or "shutdown":
-                client.send(command)
-                client.close()
-                break
-
-            #Sends user info to server for QUIT command
-            elif command == "QUIT" or "quit":
-                client.close()
-                print("200 OK")
-                break
-            
-            #Unexpected command catch
-            else:
-                print("400 invalid command")
-
-
-    #Establishing Connection
     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     SERVER_PORT = 7418
-    client.connect(('0.0.0.0', SERVER_PORT))
-    client.send(commands())
-    from_server = client.recv(4096)
-    client.close()
-    print (from_server)
+    server_address = '0.0.0.0'  # replace with the server IP address or hostname
+    client.connect((server_address, SERVER_PORT))
+
+    while True:
+        request = commands()
+        client.send(request.encode())
 
 
 if __name__ == "__main__":
