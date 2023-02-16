@@ -40,15 +40,18 @@ def commands():
 
 def main():
     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    SERVER_PORT = 7418
-    server_address = '0.0.0.0' 
-    client.connect((server_address, SERVER_PORT))
+    SERVER_PORT = 7418 
+    client.connect(('0.0.0.0', SERVER_PORT))
 
     while True:
         request = commands()
-        client.send(request.encode())
+        client.send(request)
+
+        response = client.recv(1024)
+        print(response)
 
 
 if __name__ == "__main__":
     main()
+
 
