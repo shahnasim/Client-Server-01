@@ -1,4 +1,6 @@
 import socket
+import pandas as pd
+import openpyxl
 
 def processBuy(users, stocks, stock, price, amount, user):
     if stock not in stocks:

@@ -1,4 +1,7 @@
 import socket
+import pandas as pd
+import openpyxl
+
 def commands():
     while True:
         command = raw_input("Enter your command (BUY, SELL, LIST, BALANCE, QUIT, SHUTDOWN): ")
