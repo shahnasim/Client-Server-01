@@ -7,6 +7,7 @@ BUFFER_SIZE = 1024
 
 db_file = 'database.xml'
 
+# Login the user
 def login(id, pw):
     tree = ET.parse(db_file)
     root = tree.getroot()
@@ -17,6 +18,72 @@ def login(id, pw):
             return True, id
     return False, None
 
+# Shows user's balance--outline
+def user_balance(user_id):
+    # Laod the XML file
+    tree = ET.parse('users.xml')
+    root = tree.getroot()
+    
+    # put code here
+    # get the blance from user.xml for the user then send the blance over to the clinet
+    
+    return
+    
+# Show stock list
+def list_stock():
+    tree = ET.parse('stocksAvailable.xml')
+    root = tree.getroot()
+    # while or for lop that read the the stock in the stoksAvailabe.xml file'
+        # if stament that cheeks to see if the quity of the file is not zero
+        # if quity is not zero
+            # then print out the name of the of the stock 
+    return
+
+# Sell the stock
+def sell_stock(user_id, symbol, quantiry):
+    tree = ET.parse('')
+    root = tree.getroot()
+    
+    # find the user in the user.xml
+    # find the stock the are selling
+    # chenck if the quantiy the user what to sell is less than or equal to the amount they have
+    # if do then find the stokc in the stock.xml and add the quantiry to the stock
+    # and the amount with of the stock times the quantiry to the user's blance in user.xml
+    # save changes to both .xml files
+    # return output to clinet
+    return
+
+# lookup
+def lookup(user_id):
+    tree = ET.parse('')
+    root = tree.getroot()
+    
+    #follow incrustions on the assiment pager
+   return
+
+# diff shutdown():
+    # chnages all users that have online status to offline status
+    # and deconnects all the clints from the server
+
+# diff logout():
+    # changes user status to offline
+    
+# diff quit():
+    # deconnects the clint from the server
+
+# diff deposit(user_id, amountAdded):
+    # add the amount of money being added to the user's balance
+    # save changes
+    # send message back saying the deposit went throw
+
+#
+# diff who(user_id):
+    # user_id need to equal root if the command can be run
+    # print out all the user that have online statut
+
+
+
+# Buys the stock
 def buy_stock(user_id, symbol, quantity):
     # Load the XML file
     tree = ET.parse('users.xml')
@@ -77,6 +144,28 @@ while True:
             conn.sendall("Successfully bought %d shares of %s for %.2f USD" % (quantity, symbol, get_stock_price(symbol) * quantity))
         else:
             conn.sendall("Error: %s" % message)
+            
+    # elif action == 'sell':
+    
+    # elif action == 'blance':
+    
+    # elif action == 'lookup':
+    
+    # elif action == 'depoist':
+    
+    # elif action == 'list':
+    
+    # elif action == 'who':
+    
+    # elif action == 'logout':
+    
+    # elif action == 'quit':
+    
+    # elif action == 'shoutdown':
+    
+    
+    
+    
     else:
         conn.sendall("Invalid action. Please enter 'login' or 'buy'.")
     conn.close()
