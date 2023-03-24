@@ -1,11 +1,137 @@
-<users>
+<root>
+  <users>
     <user id="root">
-        <password>root01</password>
-        <status>Offline</status>
+      <password>root01</password>
+      <status>Offline</status>
+      <rootStatus>yes</rootStatus>
+      <usdBalance>35000</usdBalance>
+      <stocks>
+        <stock symbol="GOOG">
+          <quantity>64</quantity>
+        </stock>
+        <stock symbol="META">
+          <quantity>49</quantity>
+        </stock>
+      </stocks>
     </user>
-    <user id="user2">
-        <password>password2</password>
-        <status>Offline</status>
+    <user id="mary">
+      <password>mary01</password>
+      <status>Offline</status>
+      <rootStatus>no</rootStatus>
+      <usdBalance>35000</usdBalance>
+      <stocks>
+        <stock symbol="NVDA">
+          <quantity>65</quantity>
+        </stock>
+        <stock symbol="AMD">
+          <quantity>14</quantity>
+        </stock>
+      </stocks>
     </user>
-    <!-- additional users can be added here -->
-</users>
+    <user id="john">
+      <password>john01</password>
+      <status>Offline</status>
+      <rootStatus>no</rootStatus>
+      <usdBalance>35000</usdBalance>
+      <stocks>
+        <stock symbol="INTC">
+          <quantity>62</quantity>
+        </stock>
+        <stock symbol="META">
+          <quantity>8</quantity>
+        </stock>
+      </stocks>
+    </user>
+    <user id="moe">
+      <password>moe01</password>
+      <status>Offline</status>
+      <rootStatus>no</rootStatus>
+      <usdBalance>35000</usdBalance>
+      <stocks>
+        <stock symbol="AMZN">
+          <quantity>19</quantity>
+        </stock>
+        <stock symbol="META">
+          <quantity>46</quantity>
+        </stock>
+      </stocks>
+    </user>
+  </users>
+  <stocksAvailable>
+    <stock symbol="AAPL">
+      <name>Apple</name>
+      <price>157.40</price>
+      <quantity>100</quantity>
+    </stock>
+    <stock symbol="MSFT">
+      <name>Microsoft</name>
+      <price>272.23</price>
+      <quantity>100</quantity>
+    </stock>
+    <stock symbol="AMZN">
+      <name>Amazon</name>
+      <price>97.71</price>
+      <quantity>100</quantity>
+    </stock>
+    <stock symbol="TSLA">
+      <name>Tesla</name>
+      <price>183.25</price>
+      <quantity>100</quantity>
+    </stock>
+    <stock symbol="AMD">
+      <name>AMD</name>
+      <price>96.81</price>
+      <quantity>100</quantity>
+    </stock>
+    <stock symbol="GOOG">
+      <name>Google</name>
+      <price>150.50</price>
+      <quantity>100</quantity>
+    </stock>
+    <stock symbol="NVDA">
+      <name>Nvidia</name>
+      <price>259.00</price>
+      <quantity>100</quantity>
+    </stock>
+    <stock symbol="META">
+      <name>Meta</name>
+      <price>197.81</price>
+      <quantity>100</quantity>
+    </stock>
+    <stock symbol="NKE">
+      <name>Nike</name>
+      <price>121.20</price>
+      <quantity>100</quantity>
+    </stock>
+    <stock symbol="DIS">
+      <name>Disney</name>
+      <price>94.22</price>
+      <quantity>100</quantity>
+    </stock>
+    <stock symbol="ADBE">
+      <name>Adobe</name>
+      <price>362.88</price>
+      <quantity>100</quantity>
+    </stock>
+    <stock symbol="NFLX">
+      <name>Netflix</name>
+      <price>305.13</price>
+      <quantity>100</quantity>
+    </stock>
+    <stock symbol="BA">
+      <name>Boeing</name>
+      <price>204.77</price>
+      <quantity>100</quantity>
+    </stock>
+    <stock symbol="LMT">
+      <name>Lockheed Martin</name>
+      <price>475.70</price>
+      <quantity>100</quantity>
+    </stock>
+    <stock symbol="INTC">
+      <name>Intel</name>
+      <price>29.16</price>
+      <quantity>100</quantity>
+    </stock>
+  </stocksAvailable>
+</root>
