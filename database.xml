@@ -1,0 +1,11 @@
+<users>
+    <user id="root">
+        <password>root01</password>
+        <status>Offline</status>
+    </user>
+    <user id="user2">
+        <password>password2</password>
+        <status>Offline</status>
+    </user>
+    <!-- additional users can be added here -->
+</users>
