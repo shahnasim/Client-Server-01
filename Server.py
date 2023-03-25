@@ -1,11 +1,49 @@
 import socket
 import xml.etree.ElementTree as ET
+import threading
 
 HOST = ''
 PORT = 5000
 BUFFER_SIZE = 1024
 
 db_file = 'database.xml'
+
+def handle_client(conn, addr):
+    while True:
+        data = conn.recv(BUFFER_SIZE)
+        if not data:
+            break
+        msg = data.decode()
+        args = msg.split(',')
+        action = args[0]
+        if action == 'login':
+            id = args[1]
+            pw = args[2]
+            success, user_id = login(id, pw)
+            if success:
+                conn.sendall("Logged in as user ID %s" % user_id)
+            else:
+                conn.sendall("Invalid login")
+        elif action == 'buy':
+            user_id = args[1]
+            symbol = args[2]
+            quantity = int(args[3])
+            success, msg = buy_stock(user_id, symbol, quantity)
+            if success:
+                conn.sendall(msg)
+            else:
+                conn.sendall("Error: " + msg)
+        elif action == 'price':
+            symbol = args[1]
+            price = get_stock_price(symbol)
+            if price is None:
+                conn.sendall("Error: Invalid symbol")
+            else:
+                conn.sendall("Current price of %s: %.2f USD" % (symbol, price))
+        else:
+            conn.sendall("Invalid action. Please enter 'login', 'buy', or 'price'.")
+
+    conn.close()
 
 # Login the user
 def login(id, pw):
@@ -117,8 +155,13 @@ def buy_stock(user_id, symbol, quantity):
     return True, "Bought %d shares of %s for %.2f USD" % (quantity, symbol, stock_price * quantity)
 
 def get_stock_price(symbol):
-    # Replace with API call to get stock price for given symbol
-    return 10.00
+    # Load the XML file
+    tree = ET.parse(db_file)
+    root = tree.getroot()
+    for stock in root.findall('stock'):
+        if stock.get('symbol') == symbol:
+            return stock.find('price').text
+    return 'Stock not found'
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind((HOST, PORT))
