@@ -53,51 +53,106 @@ def login(id, pw):
         if user.get('id') == id and user.find('password').text == pw:
             user.find('status').text = "Online"
             tree.write(db_file)
-            return True, id
-    return False, None
+            return True, id, "You are now logged in as {}".format(id)
+    return False, None, "Login failed. Please check your credentials and try again."
+
 
 # Shows user's balance--outline
-def user_balance(user_id):
-    # Laod the XML file
-    tree = ET.parse('users.xml')
+def display_balance(username):
+    import xml.etree.ElementTree as ET
+    
+    # Parse the XML file and get the root element
+    tree = ET.parse('database.xml')
     root = tree.getroot()
-    
-    # put code here
-    # get the blance from user.xml for the user then send the blance over to the clinet
-    
-    return
+
+    # Find the user element with the given username
+    user = root.find(".//user[@id='{}']".format(username))
+
+    # Get the USD balance element value for the user
+    usd_balance = user.find('usdBalance').text
+
+    # Display the USD balance for the user
+    print("Your current USD balance is: {}".format(usd_balance))
     
 # Show stock list
 def list_stock():
     tree = ET.parse('stocksAvailable.xml')
     root = tree.getroot()
-    # while or for lop that read the the stock in the stoksAvailabe.xml file'
-        # if stament that cheeks to see if the quity of the file is not zero
-        # if quity is not zero
-            # then print out the name of the of the stock 
-    return
+    stock_list = ""
+    for stock in root.findall('stock'):
+        if int(stock.find('quantity').text) != 0:
+            stock_list += "{} - {} USD per share\n".format(stock.get('symbol'), stock.find('price').text)
+    return stock_list
 
 # Sell the stock
-def sell_stock(user_id, symbol, quantiry):
-    tree = ET.parse('')
-    root = tree.getroot()
-    
-    # find the user in the user.xml
-    # find the stock the are selling
-    # chenck if the quantiy the user what to sell is less than or equal to the amount they have
-    # if do then find the stokc in the stock.xml and add the quantiry to the stock
-    # and the amount with of the stock times the quantiry to the user's blance in user.xml
-    # save changes to both .xml files
-    # return output to clinet
-    return
+def sell_stock(user_id, symbol, quantity):
+    # Load the XML files
+    user_tree = ET.parse('database.xml')
+    user_root = user_tree.getroot()
+    stock_tree = ET.parse('stocksAvailable.xml')
+    stock_root = stock_tree.getroot()
+
+    # Find the user with the given ID
+    user_elem = user_root.find("./user[@id='%s']" % user_id)
+
+    # Check if the user owns the stock, and if so, update the quantity
+    stock_elem = user_elem.find("stocks/stock[@symbol='%s']" % symbol)
+    if stock_elem is None:
+        return False, "You don't own any shares of this stock"
+
+    current_quantity = int(stock_elem.find('quantity').text)
+    if current_quantity < quantity:
+        return False, "You don't have enough shares of this stock to sell"
+
+    # Subtract the sold quantity from the user's stock quantity
+    stock_elem.find('quantity').text = str(current_quantity - quantity)
+
+    # Update the stock's quantity and total value
+    stock_info = stock_root.find("./stock[@symbol='%s']" % symbol)
+    stock_info.find('quantity').text = str(int(stock_info.find('quantity').text) + quantity)
+    stock_info.find('totalValue').text = str(float(stock_info.find('price').text) * int(stock_info.find('quantity').text))
+
+    # Add the sold amount to the user's USD balance
+    sold_amount = float(stock_info.find('price').text) * quantity
+    user_elem.find('usdBalance').text = str(float(user_elem.find('usdBalance').text) + sold_amount)
+
+    # Save changes to the XML files
+    user_tree.write('database.xml')
+    stock_tree.write('stocksAvailable.xml')
+
+    return True, "You sold %d shares of %s for a total of %.2f USD" % (quantity, symbol, sold_amount)
 
 # lookup
 def lookup(user_id):
-    tree = ET.parse('')
+    tree = ET.parse(db_file)
     root = tree.getroot()
-    
-    #follow incrustions on the assiment pager
-   return
+    user_elem = root.find("./user[@id='%s']" % user_id)
+
+    if user_elem is None:
+        return "User not found"
+
+    stocks = user_elem.find("stocks")
+
+    if stocks is None:
+        return "You don't own any shares of stocks"
+
+    stock_list = ""
+
+    for stock in stocks.findall('stock'):
+        symbol = stock.get('symbol')
+        quantity = int(stock.find('quantity').text)
+        if quantity == 0:
+            continue
+        price = get_stock_price(symbol)
+        if price is None:
+            continue
+        total_value = price * quantity
+        stock_list += "{} - {} share(s) at {} USD each, Total Value: {} USD\n".format(symbol, quantity, price, total_value)
+
+    if stock_list == "":
+        return "You don't own any shares of stocks"
+    else:
+        return stock_list
 
 # diff shutdown():
     # chnages all users that have online status to offline status
@@ -115,7 +170,8 @@ def lookup(user_id):
     # send message back saying the deposit went throw
 
 #
-# diff who(user_id):
+def who(user_id):
+    pass
     # user_id need to equal root if the command can be run
     # print out all the user that have online statut
 
