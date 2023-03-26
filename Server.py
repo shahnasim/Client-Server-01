@@ -54,7 +54,7 @@ def login(action, id, pw):
             if user.get('id') == id and user.find('password').text == pw:
                 user.find('status').text = "Online"
                 tree.write(db_file)
-                return True, id, "You are now logged in as {}".format(id)
+                return True, id, "Welcome, {}! You are now logged in.".format(id)
         return False, None, "Login failed. Please check your credentials and try again."
     except ValueError:
         return False, None, "Login failed. Please check your credentials and try again."
@@ -65,7 +65,7 @@ def display_balance(username):
     import xml.etree.ElementTree as ET
     
     # Parse the XML file and get the root element
-    tree = ET.parse('database.xml')
+    tree = ET.parse(db_file)
     root = tree.getroot()
 
     # Find the user element with the given username
@@ -90,7 +90,7 @@ def list_stock():
 # Sell the stock
 def sell_stock(user_id, symbol, quantity):
     # Load the XML files
-    user_tree = ET.parse('database.xml')
+    user_tree = ET.parse(db_file)
     user_root = user_tree.getroot()
     stock_tree = ET.parse('stocksAvailable.xml')
     stock_root = stock_tree.getroot()
@@ -238,7 +238,7 @@ while True:
     data = conn.recv(BUFFER_SIZE)
     action, id, pw = data.split(',')
     if action == 'login':
-        success, user_id = login(action, id, pw)
+        success, user_id, msg = login('login', id, pw)
         if success:
             conn.sendall("Login successful. Welcome back, %s!" % user_id)
         else:
