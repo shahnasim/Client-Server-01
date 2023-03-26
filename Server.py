@@ -46,15 +46,18 @@ def handle_client(conn, addr):
     conn.close()
 
 # Login the user
-def login(id, pw):
-    tree = ET.parse(db_file)
-    root = tree.getroot()
-    for user in root.findall('user'):
-        if user.get('id') == id and user.find('password').text == pw:
-            user.find('status').text = "Online"
-            tree.write(db_file)
-            return True, id, "You are now logged in as {}".format(id)
-    return False, None, "Login failed. Please check your credentials and try again."
+def login(action, id, pw):
+    try:
+        tree = ET.parse(db_file)
+        root = tree.getroot()
+        for user in root.findall('user'):
+            if user.get('id') == id and user.find('password').text == pw:
+                user.find('status').text = "Online"
+                tree.write(db_file)
+                return True, id, "You are now logged in as {}".format(id)
+        return False, None, "Login failed. Please check your credentials and try again."
+    except ValueError:
+        return False, None, "Login failed. Please check your credentials and try again."
 
 
 # Shows user's balance--outline
@@ -154,17 +157,21 @@ def lookup(user_id):
     else:
         return stock_list
 
-# diff shutdown():
+def shutdown():
+    pass
     # chnages all users that have online status to offline status
     # and deconnects all the clints from the server
 
-# diff logout():
+def logout():
+    pass
     # changes user status to offline
     
-# diff quit():
+def quit():
+    pass
     # deconnects the clint from the server
 
-# diff deposit(user_id, amountAdded):
+def deposit(user_id, amt):
+    pass
     # add the amount of money being added to the user's balance
     # save changes
     # send message back saying the deposit went throw
@@ -231,7 +238,7 @@ while True:
     data = conn.recv(BUFFER_SIZE)
     action, id, pw = data.split(',')
     if action == 'login':
-        success, user_id = login(id, pw)
+        success, user_id = login(action, id, pw)
         if success:
             conn.sendall("Login successful. Welcome back, %s!" % user_id)
         else:
@@ -243,28 +250,24 @@ while True:
             conn.sendall("Successfully bought %d shares of %s for %.2f USD" % (quantity, symbol, get_stock_price(symbol) * quantity))
         else:
             conn.sendall("Error: %s" % message)
-            
-    # elif action == 'sell':
-    
-    # elif action == 'blance':
-    
-    # elif action == 'lookup':
-    
-    # elif action == 'depoist':
-    
-    # elif action == 'list':
-    
-    # elif action == 'who':
-    
-    # elif action == 'logout':
-    
-    # elif action == 'quit':
-    
-    # elif action == 'shoutdown':
-    
-    
-    
-    
+    elif action == 'sell':
+        pass
+    elif action == 'balance':
+        pass
+    elif action == 'lookup':
+        pass
+    elif action == 'deposit':
+        pass
+    elif action == 'list':
+        pass
+    elif action == 'who':
+        pass
+    elif action == 'logout':
+        pass
+    elif action == 'quit':
+        pass
+    elif action == 'shutdown':
+        pass
     else:
         conn.sendall("Invalid action. Please enter 'login' or 'buy'.")
     conn.close()
