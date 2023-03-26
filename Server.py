@@ -251,7 +251,12 @@ while True:
         else:
             conn.sendall("Error: %s" % message)
     elif action == 'sell':
-        pass
+        symbol, quantiy = id, int(pw)
+        success, message = sell_stock(user_id, symbol, quanity)
+        if success:
+            conn.sendall("Successfully solded %d shares of %s for %.2f USD" % (quantity, symbol, get_stock_price(symbol) * quantity))
+        else:
+            conn.sendall("Error: %s" % message)
     elif action == 'balance':
         pass
     elif action == 'lookup':
