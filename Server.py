@@ -19,7 +19,7 @@ def handle_client(conn, addr):
         if action == 'login':
             id = args[1]
             pw = args[2]
-            success, user_id = login(id, pw)
+            success, user_id, message = login(id, pw)
             if success:
                 conn.sendall("Logged in as user ID %s" % user_id)
             else:
@@ -46,7 +46,7 @@ def handle_client(conn, addr):
     conn.close()
 
 # Login the user
-def login(action, id, pw):
+def login(id, pw):
     try:
         tree = ET.parse(db_file)
         root = tree.getroot()
@@ -54,7 +54,7 @@ def login(action, id, pw):
             if user.get('id') == id and user.find('password').text == pw:
                 user.find('status').text = "Online"
                 tree.write(db_file)
-                return True, id, "Welcome, {}! You are now logged in.".format(id)
+                return True, id, "Welcome, %s! You are now logged in." % id
         return False, None, "Login failed. Please check your credentials and try again."
     except ValueError:
         return False, None, "Login failed. Please check your credentials and try again."
@@ -63,20 +63,21 @@ def login(action, id, pw):
 # Shows user's balance--outline
 def display_balance(username):
     import xml.etree.ElementTree as ET
-    
+
     # Parse the XML file and get the root element
     tree = ET.parse(db_file)
     root = tree.getroot()
 
     # Find the user element with the given username
-    user = root.find(".//user[@id='{}']".format(username))
+    user = root.find(".//user[@id='%s']" % username)
 
     # Get the USD balance element value for the user
     usd_balance = user.find('usdBalance').text
 
     # Display the USD balance for the user
-    print("Your current USD balance is: {}".format(usd_balance))
-    
+    print("Your current USD balance is: %s" % usd_balance)
+
+
 # Show stock list
 def list_stock():
     tree = ET.parse('stocksAvailable.xml')
@@ -84,8 +85,9 @@ def list_stock():
     stock_list = ""
     for stock in root.findall('stock'):
         if int(stock.find('quantity').text) != 0:
-            stock_list += "{} - {} USD per share\n".format(stock.get('symbol'), stock.find('price').text)
+            stock_list += "%s - %s USD per share\n" % (stock.get('symbol'), stock.find('price').text)
     return stock_list
+
 
 # Sell the stock
 def sell_stock(user_id, symbol, quantity):
@@ -238,11 +240,13 @@ while True:
     data = conn.recv(BUFFER_SIZE)
     action, id, pw = data.split(',')
     if action == 'login':
-        success, user_id, msg = login('login', id, pw)
+        id = args[1]
+        pw = args[2]
+        success, user_id, msg = login(id, pw)
         if success:
-            conn.sendall("Login successful. Welcome back, %s!" % user_id)
+            conn.sendall("Logged in as user ID %s" % user_id)
         else:
-            conn.sendall("Invalid login credentials. Please try again.")
+            conn.sendall("Invalid login")
     elif action == 'buy':
         symbol, quantity = id, int(pw)
         success, message = buy_stock(user_id, symbol, quantity)
@@ -252,7 +256,7 @@ while True:
             conn.sendall("Error: %s" % message)
     elif action == 'sell':
         symbol, quantiy = id, int(pw)
-        success, message = sell_stock(user_id, symbol, quanity)
+        success, message = sell_stock(user_id, symbol, quantity)
         if success:
             conn.sendall("Successfully solded %d shares of %s for %.2f USD" % (quantity, symbol, get_stock_price(symbol) * quantity))
         else:
